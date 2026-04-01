@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriTech - Détails des Cultures</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Fond dégradé moderne comme sur ton image */
+        body { 
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d); 
+            min-height: 100vh; 
+            display: flex; 
+            color: white; 
+            margin: 0; 
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        /* Barre latérale (Sidebar) */
+        .sidebar { 
+            width: 260px; 
+            background: rgba(0, 0, 0, 0.4); 
+            backdrop-filter: blur(15px); 
+            padding: 30px 20px; 
+            border-right: 1px solid rgba(255,255,255,0.1);
+            position: fixed;
+            height: 100vh;
+        }
+        .sidebar h4 { font-weight: 800; letter-spacing: 2px; margin-bottom: 40px; color: #fff; }
+        .sidebar h6 { font-size: 0.75rem; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-top: 25px; margin-bottom: 15px; }
+        
+        .nav-link { 
+            color: rgba(255,255,255,0.7); 
+            padding: 12px 15px; 
+            border-radius: 10px; 
+            display: flex; 
+            align-items: center; 
+            text-decoration: none; 
+            transition: 0.3s;
+            margin-bottom: 5px;
+        }
+        .nav-link i { margin-right: 12px; width: 20px; text-align: center; }
+        .nav-link:hover, .nav-link.active { 
+            color: white; 
+            background: rgba(255,255,255,0.15); 
+            opacity: 1;
+        }
+
+        /* Contenu Principal */
+        .main-content { 
+            margin-left: 260px; 
+            flex: 1; 
+            padding: 50px; 
+        }
+        .page-title { font-weight: 700; font-size: 2.5rem; margin-bottom: 40px; }
+
+        /* Grille de Cartes */
+        .crop-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 30px; 
+        }
+
+        /* Cartes de Culture (Style exact de l'image) */
+        .crop-card { 
+            position: relative; 
+            height: 380px; 
+            border-radius: 25px; 
+            overflow: hidden; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .crop-card:hover { transform: translateY(-12px); }
+        
+        .crop-card img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            filter: brightness(0.65); 
+            transition: 0.5s;
+        }
+        .crop-card:hover img { filter: brightness(0.4); transform: scale(1.1); }
+
+        .crop-info { 
+            position: absolute; 
+            bottom: 0; 
+            padding: 25px; 
+            background: linear-gradient(transparent, rgba(0,0,0,0.9)); 
+            width: 100%;
+        }
+        .crop-info h4 { font-weight: 700; font-size: 1.5rem; margin-bottom: 10px; }
+        .crop-info p { font-size: 0.9rem; line-height: 1.5; opacity: 0.85; margin: 0; }
+
+        /* Scrollbar personnalisée */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h4>AGRITECH</h4>
+        
+        <h6>Navigation principale</h6>
+        <a href="{{ url_for('dashboard_farmer') }}" class="nav-link">
+            <i class="fas fa-th-large"></i> Dashboard
+        </a>
+        <a href="#" class="nav-link">
+            <i class="fas fa-comment-dots"></i> Chatbot
+        </a>
+        
+        <h6>Compte</h6>
+        <a href="#" class="nav-link">
+            <i class="fas fa-user-circle"></i> Mon Profil
+        </a>
+        
+        <h6>Général</h6>
+        <a href="{{ url_for('crop_details') }}" class="nav-link active">
+            <i class="fas fa-leaf"></i> Crop Details
+        </a>
+        <a href="#" class="nav-link">
+            <i class="fas fa-flask"></i> Fertilisants
+        </a>
+
+        <div style="position: absolute; bottom: 30px; width: calc(100% - 40px);">
+            <a href="{{ url_for('logout') }}" class="nav-link text-danger">
+                <i class="fas fa-sign-out-alt"></i> Déconnexion
+            </a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h1 class="page-title">Crop Details</h1>
+        
+        <div class="crop-grid">
+            
+            <div class="crop-card">
+                <img src="https://images.unsplash.com/photo-1536633390847-bc055549e048?q=80&w=600" alt="Rice">
+                <div class="crop-info">
+                    <h4>Rice (Riz)</h4>
+                    <p>Le riz est la céréale la plus consommée au monde. Il nécessite un sol riche et une irrigation abondante.</p>
+                </div>
+            </div>
+
+            <div class="crop-card">
+                <img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?q=80&w=600" alt="Wheat">
+                <div class="crop-info">
+                    <h4>Wheat (Blé)</h4>
+                    <p>Le blé préfère les climats tempérés. C'est la base de la fabrication du pain et des pâtes.</p>
+                </div>
+            </div>
+
+            <div class="crop-card">
+                <img src="https://images.unsplash.com/photo-1551754655-cd27e38d2076?q=80&w=600" alt="Corn">
+                <div class="crop-info">
+                    <h4>Corn (Maïs)</h4>
+                    <p>Plante céréalière annuelle riche en amidon. Elle demande une exposition solaire maximale.</p>
+                </div>
+            </div>
+
+            <div class="crop-card">
+                <img src="https://images.unsplash.com/photo-1518977676601-b53f02ac10dd?q=80&w=600" alt="Potato">
+                <div class="crop-info">
+                    <h4>Potato (Patate)</h4>
+                    <p>Un tubercule essentiel pour la sécurité alimentaire. Elle pousse mieux dans des sols meubles.</p>
+                </div>
+            </div>
+
+            <div class="crop-card">
+                <img src="https://images.unsplash.com/photo-1594904351111-a072f80b1a71?q=80&w=600" alt="Cotton">
+                <div class="crop-info">
+                    <h4>Cotton (Coton)</h4>
+                    <p>Fibre naturelle douce poussant autour des graines de la plante. Crucial pour l'industrie textile.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <p class="mt-5 text-center opacity-50 small">Copyright © 2026 Student Name - AgriTech Project</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
