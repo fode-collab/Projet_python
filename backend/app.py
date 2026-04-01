@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import google.generativeai as genai
+# test
 
 app = Flask(__name__)
 app.secret_key = "cle_secrete_agritech_2026"
